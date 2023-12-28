@@ -6,13 +6,29 @@ const int W = 100;
 
 typedef struct {
     double vec[3];
-} Vec3;
+} Vec3D;
 
 typedef struct {
-    Vec3 array[H*W];
-} Array;
+    Vec3D array[H*W];
+} ArrayD;
 
-void writeArrayToFile(const Array *arr) {
+typedef struct {
+    unsigned char vec[3];
+} Vec3UC;
+
+typedef struct {
+    Vec3UC array[H*W];
+} ArrayUC;
+
+typedef struct {
+    unsigned int vec[3];
+} Vec3I;
+
+typedef struct {
+    Vec3I array[H*W];
+} ArrayI;
+
+void writeArrayToFile(const ArrayUC *arr) {
     FILE *file = fopen("data.txt", "w");
     if (file == NULL) {
         perror("Error opening file");
@@ -22,15 +38,9 @@ void writeArrayToFile(const Array *arr) {
     fprintf(file, "%d %d\n", H, W);
 
     for (int i = 0; i < H * W; ++i) {
-        fprintf(file, "%lf %lf %lf\n", arr->array[i].vec[0], arr->array[i].vec[1], arr->array[i].vec[2]);
+        // fprintf(file, "%lf %lf %lf\n", arr->array[i].vec[0], arr->array[i].vec[1], arr->array[i].vec[2]);
+        fprintf(file, "%u %u %u\n", arr->array[i].vec[0], arr->array[i].vec[1], arr->array[i].vec[2]);
     }
 
     fclose(file);
-}
-
-int main() {
-    Array a;
-    memset(&a, 0, sizeof(a));
-    writeArrayToFile(&a);
-    return 0;
 }
