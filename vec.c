@@ -4,12 +4,14 @@
 const int H = 100;
 const int W = 100;
 
+#define ARRAY_SIZE (H*W)
+
 typedef struct {
     double vec[3];
 } Vec3D;
 
 typedef struct {
-    Vec3D array[H*W];
+    Vec3D array[ARRAY_SIZE];
 } ArrayD;
 
 typedef struct {
@@ -17,7 +19,7 @@ typedef struct {
 } Vec3UC;
 
 typedef struct {
-    Vec3UC array[H*W];
+    Vec3UC array[ARRAY_SIZE];
 } ArrayUC;
 
 typedef struct {
@@ -25,7 +27,7 @@ typedef struct {
 } Vec3I;
 
 typedef struct {
-    Vec3I array[H*W];
+    Vec3I array[ARRAY_SIZE];
 } ArrayI;
 
 void writeArrayToFile(const ArrayUC *arr) {
@@ -44,3 +46,6 @@ void writeArrayToFile(const ArrayUC *arr) {
 
     fclose(file);
 }
+
+// Vec3D unpack(Vec3D v) {
+// }

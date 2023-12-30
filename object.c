@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <math.h>
-#include "vec.c"
+#include "vmath.c"
 
 typedef struct {
     ArrayD vertices;
@@ -60,7 +60,7 @@ Mesh read(char file_name[]) {
                 if ((line[i] == ' ' || line[i] == '\n' || line[i] == '\r' || line[i+1] == '\0') && j > 0) {
                     number[j] = '\0';
                     int faceIndex = atoi(number);
-                    m.faces.array[f].vec[k++] = faceIndex;
+                    m.faces.array[f].vec[k++] = faceIndex - 1;
                     memset(number, 0, sizeof(number));
                     j = 0;
                 }
@@ -68,54 +68,16 @@ Mesh read(char file_name[]) {
             f++;
         }
     }
-
     fclose(file);
     return m;
 }
 
-// Vec3D unpack(Vec3D v) {
-// }
-
-Vec3D vsub(Vec3D a, Vec3D b) {
-    Vec3D c;
-    for (int i = 0; i < 3; i++) {
-        c.vec[i] = a.vec[i] - b.vec[i];
-    }
-    return c;
-}
-
-Vec3D cross_product(Vec3D a, Vec3D b) {
-    double ux = a.vec[0], uy = a.vec[1], uz = a.vec[2];
-    double vx = b.vec[0], vy = b.vec[1], vz = b.vec[2];
-
-    double cx = uy * vz - uz * vy;
-    double cy = uz * vx - ux * vz;
-    double cz = ux * vy - uy * vx;
-
-    Vec3D c;
-    c.vec[0] = cx, c.vec[1] = cy, c.vec[2] = cz;
-    return c;
-}
-
-Vec3D normalize(Vec3D v) {
-    Vec3D m;
-    memset(&m, 0, sizeof(m));
-    double vx = v.vec[0], vy = v.vec[1], vz = v.vec[2];
-    double magnitude = sqrt(pow(vx, 2.0) + pow(vy, 2.0) + pow(vz, 2.0));
-    if (magnitude == 0) {
-        return m;
-    }
-    m.vec[0] = vx / magnitude, m.vec[1] = vy / magnitude, m.vec[2] = vz / magnitude;
-    return m;
-}
-
 void generate_normals(Mesh *m) {
-    for (int i = 0; m->faces.array[i].vec[0] != 0 && m->faces.array[i].vec[1] != 0 && m->faces.array[i].vec[2] != 0; i++) {
+    for (int i = 0; m->faces.array[i].vec[0] != 0 || m->faces.array[i].vec[1] != 0 || m->faces.array[i].vec[2] != 0; i++) {
         int a = m->faces.array[i].vec[0], b = m->faces.array[i].vec[1], c = m->faces.array[i].vec[2];
         Vec3D v0 = m->vertices.array[a], v1 = m->vertices.array[b], v2 = m->vertices.array[c];
         Vec3D n = cross_product(vsub(v1, v0), vsub(v2, v0));
-        n = normalize(n);
-        m->normals.array[i].vec[0] = n.vec[0], m->normals.array[i].vec[1] = n.vec[1], m->normals.array[i].vec[2] = n.vec[2];
+        m->normals.array[i] = normalize(n);
     }
 }
 
@@ -126,6 +88,7 @@ int main() {
 
     for (int i = 0; i < 16; ++i) {
         printf("%lf %lf %lf\n", m.normals.array[i].vec[0], m.normals.array[i].vec[1], m.normals.array[i].vec[2]);
+        // printf("%d %d %d\n", m.faces.array[i].vec[0], m.faces.array[i].vec[1], m.faces.array[i].vec[2]);
     }
 
     return 0;
