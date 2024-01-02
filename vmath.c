@@ -1,5 +1,5 @@
 #include <math.h>
-#include "vec.c"
+#include "vec.h"
 
 Vec3D vadd(Vec3D a, Vec3D b) {
     return (Vec3D) {a.vec[0] + b.vec[0], a.vec[1] + b.vec[1], a.vec[2] + b.vec[2]};

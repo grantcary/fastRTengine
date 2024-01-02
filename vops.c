@@ -1,34 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+#include "render.h"
 
 const int H = 100;
 const int W = 100;
-
-#define ARRAY_SIZE (H*W)
-
-typedef struct {
-    double vec[3];
-} Vec3D;
-
-typedef struct {
-    Vec3D array[ARRAY_SIZE];
-} ArrayD;
-
-typedef struct {
-    unsigned char vec[3];
-} Vec3UC;
-
-typedef struct {
-    Vec3UC array[ARRAY_SIZE];
-} ArrayUC;
-
-typedef struct {
-    unsigned int vec[3];
-} Vec3I;
-
-typedef struct {
-    Vec3I array[ARRAY_SIZE];
-} ArrayI;
 
 void writeArrayToFile(const ArrayUC *arr) {
     FILE *file = fopen("data.txt", "w");

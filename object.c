@@ -2,19 +2,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <math.h>
-#include "vmath.c"
-
-typedef struct {
-    ArrayD vertices;
-    ArrayI faces;
-    ArrayD normals;
-} Mesh;
-
-typedef struct {
-    int origin[3];
-    Mesh mesh;
-    unsigned char color[3];
-} OBJ;
+#include "render.h"
 
 // void scanArrayForNumbers(char arr[], char *num[]) {
 // }
@@ -81,15 +69,15 @@ void generate_normals(Mesh *m) {
     }
 }
 
-int main() {
-    char file_name[] = "cube.obj";
-    Mesh m = read(file_name);
-    generate_normals(&m);
+// int main() {
+//     char file_name[] = "cube.obj";
+//     Mesh m = read(file_name);
+//     generate_normals(&m);
 
-    for (int i = 0; i < 16; ++i) {
-        printf("%lf %lf %lf\n", m.normals.array[i].vec[0], m.normals.array[i].vec[1], m.normals.array[i].vec[2]);
-        // printf("%d %d %d\n", m.faces.array[i].vec[0], m.faces.array[i].vec[1], m.faces.array[i].vec[2]);
-    }
+//     for (int i = 0; i < 16; ++i) {
+//         printf("%lf %lf %lf\n", m.normals.array[i].vec[0], m.normals.array[i].vec[1], m.normals.array[i].vec[2]);
+//         // printf("%d %d %d\n", m.faces.array[i].vec[0], m.faces.array[i].vec[1], m.faces.array[i].vec[2]);
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
