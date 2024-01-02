@@ -20,6 +20,10 @@ Vec3D cross_product(Vec3D a, Vec3D b) {
     return (Vec3D) {cx, cy, cz};
 }
 
+double dot_product(Vec3D a, Vec3D b) {
+    return (double) (a.vec[0] * b.vec[0]) + (a.vec[1] * b.vec[1]) + (a.vec[2] * b.vec[2]);
+}
+
 Vec3D normalize(Vec3D v) {
     double vx = v.vec[0], vy = v.vec[1], vz = v.vec[2];
     double magnitude = sqrt(pow(vx, 2.0) + pow(vy, 2.0) + pow(vz, 2.0));
