@@ -1,5 +1,8 @@
 #include "vec.h"
 
+#ifndef OBJECT_H
+#define OBJECT_H
+
 typedef struct {
     ArrayD vertices;
     ArrayI faces;
@@ -11,3 +14,9 @@ typedef struct {
     Mesh mesh;
     unsigned char color[3];
 } OBJ;
+
+Mesh read(char[]);
+
+void generate_normals(Mesh*);
+
+#endif

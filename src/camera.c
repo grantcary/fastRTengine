@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
-#include "render.h"
+#include "vmath.h"
+#include "camera.h"
 
 Camera initializationCamera(int h, int w, float fov, Vec3D position) {
     Camera c;

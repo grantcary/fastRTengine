@@ -1,9 +1,12 @@
-#include "render.h"
+#include "vops.h"
+#include "ray.h"
+#include "object.h"
+#include "camera.h"
 
 // clang render.c camera.c object.c ray.c vmath.c vops.c -lm
 
 int main() {
-    Mesh mesh = read("cube.obj");
+    Mesh mesh = read("../objects/cube.obj");
     generate_normals(&mesh);
 
     Camera cam = initializationCamera(100, 100, 90, (Vec3D) {0.0, 0.0, 5.0});

@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <math.h>
-#include "render.h"
+#include "object.h"
+#include "vmath.h"
 
 // void scanArrayForNumbers(char arr[], char *num[]) {
 // }

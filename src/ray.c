@@ -1,5 +1,7 @@
 #include <math.h>
-#include "render.h"
+#include "vmath.h"
+#include "object.h"
+#include "camera.h"
 
 const double EPSILON = 1e-6; 
 

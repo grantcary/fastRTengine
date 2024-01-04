@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <string.h>
-#include "render.h"
+#include "vec.h"
 
 const int H = 100;
 const int W = 100;
 
 void writeArrayToFile(const ArrayUC *arr) {
-    FILE *file = fopen("data.txt", "w");
+    FILE *file = fopen("../utils/data.txt", "w");
     if (file == NULL) {
         perror("Error opening file");
         return;
