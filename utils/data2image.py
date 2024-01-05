@@ -2,7 +2,7 @@ import numpy as np
 from PIL import Image
 
 data = open('data.txt', 'r').read().splitlines()
-H, W = tuple(map(int, data[0].split()))
+W, H = tuple(map(int, data[0].split()))
 image = list(map(lambda x: tuple(map(float, x.split())) ,data[1:]))
 image = np.array(image)
 

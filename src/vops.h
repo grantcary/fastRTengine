@@ -3,6 +3,6 @@
 #ifndef VOPS_H
 #define VOPS_H
 
-void writeArrayToFile(const ArrayUC *);
+void writeArrayToFile(int, int, const ArrayUC *);
 
 #endif

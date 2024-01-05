@@ -1,17 +1,13 @@
-#include <stdio.h>
-#include <string.h>
-
 #ifndef VEC_H
 #define VEC_H
-
-#define ARRAY_SIZE 10000
 
 typedef struct {
     double vec[3];
 } Vec3D;
 
 typedef struct {
-    Vec3D array[ARRAY_SIZE];
+    Vec3D *array;
+    int size;
 } ArrayD;
 
 typedef struct {
@@ -19,7 +15,8 @@ typedef struct {
 } Vec3UC;
 
 typedef struct {
-    Vec3UC array[ARRAY_SIZE];
+    Vec3UC *array;
+    int size;
 } ArrayUC;
 
 typedef struct {
@@ -27,7 +24,8 @@ typedef struct {
 } Vec3I;
 
 typedef struct {
-    Vec3I array[ARRAY_SIZE];
+    Vec3I *array;
+    int size;
 } ArrayI;
 
 #endif
