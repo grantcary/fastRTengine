@@ -7,6 +7,6 @@
 
 unsigned ray_triangle_intersection(Vec3D, Vec3D, Vec3D, Vec3D, Vec3D, double*, double*, double*);
 
-ArrayUC object_intersection_test(Camera, Mesh);
+ArrayUC object_intersection_test(Camera, OBJ);
 
 #endif

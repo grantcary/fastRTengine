@@ -10,9 +10,9 @@ typedef struct {
 } Mesh;
 
 typedef struct {
-    int origin[3];
+    Vec3D origin;
     Mesh mesh;
-    unsigned char color[3];
+    Vec3UC color;
 } OBJ;
 
 Mesh read(char[]);
