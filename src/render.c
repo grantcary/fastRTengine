@@ -11,10 +11,14 @@ int main() {
     Mesh m = read("../objects/cube.obj");
     generate_normals(&m);
 
-    OBJ obj = { .origin = {0.0, 0.0, 0.0}, .mesh = m, .color = {252, 186, 3} };
+    OBJ cube = { .origin = {0.0, 0.0, 0.0}, .mesh = m, .color = {252, 186, 3} };
+    OBJ objects[] = {cube};
+    int objects_size = sizeof(objects) / sizeof(OBJ);
 
     Camera cam = initializationCamera(w, h, 90, (Vec3D) {0.0, 0.0, 5.0});
-    ArrayUC hit = object_intersection_test(cam, obj);
+    cam.max_depth = 3;
+
+    ArrayUC hit = object_intersection_test(cam, objects, objects_size);
     
     writeArrayToFile(w, h, &hit);
 
