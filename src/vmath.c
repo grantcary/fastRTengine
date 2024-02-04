@@ -5,8 +5,36 @@ Vec3D vadd(Vec3D a, Vec3D b) {
     return (Vec3D) {a.vec[0] + b.vec[0], a.vec[1] + b.vec[1], a.vec[2] + b.vec[2]};
 }
 
+Vec3UC uadd(Vec3UC a, Vec3UC b) {
+    return (Vec3UC) {a.vec[0] + b.vec[0], a.vec[1] + b.vec[1], a.vec[2] + b.vec[2]};
+}
+
 Vec3D vsub(Vec3D a, Vec3D b) {
     return (Vec3D) {a.vec[0] - b.vec[0], a.vec[1] - b.vec[1], a.vec[2] - b.vec[2]};
+}
+
+Vec3D svdiv(Vec3D a, double b) {
+    return (Vec3D) {a.vec[0] / b, a.vec[1] / b, a.vec[2] / b};
+}
+
+Vec3UC umul(Vec3UC a, Vec3UC b) {
+    return (Vec3UC) {a.vec[0] * b.vec[0], a.vec[1] * b.vec[1], a.vec[2] * b.vec[2]};
+}
+
+Vec3UC sumul(Vec3UC a, double b) {
+    return (Vec3UC) {a.vec[0] * b, a.vec[1] * b, a.vec[2] * b};
+}
+
+Vec3D vmul(Vec3D a, Vec3D b) {
+    return (Vec3D) {a.vec[0] * b.vec[0], a.vec[1] * b.vec[1], a.vec[2] * b.vec[2]};
+}
+
+Vec3D sdmul(Vec3D a, double b) {
+    return (Vec3D) {a.vec[0] * b, a.vec[1] * b, a.vec[2] * b};
+}
+
+double vsum(Vec3D a) {
+    return a.vec[0] + a.vec[1] + a.vec[2];
 }
 
 Vec3D cross_product(Vec3D a, Vec3D b) {

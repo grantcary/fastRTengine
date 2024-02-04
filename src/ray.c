@@ -6,6 +6,7 @@
 #include "vmath.h"
 #include "object.h"
 #include "camera.h"
+#include "light.h"
 
 const double EPSILON = 1e-6; 
 
@@ -29,7 +30,7 @@ bool ray_triangle_intersection(Vec3D origin, Vec3D direction, Vec3D v0, Vec3D v1
     return true;
 }
 
-bool intersect(Mesh m, Vec3D origin, Vec3D direction, double *tNear) {
+bool intersect(Mesh m, Vec3D origin, Vec3D direction, double *tNear, int *tIndex) {
     bool isect = false;
     for (int j = 0; j < m.faces.size; j++) {
         int a = m.faces.array[j].vec[0], b = m.faces.array[j].vec[1], c = m.faces.array[j].vec[2];
@@ -37,38 +38,79 @@ bool intersect(Mesh m, Vec3D origin, Vec3D direction, double *tNear) {
         double t = INFINITY, u, v;
         if (ray_triangle_intersection(origin, direction, v0, v1, v2, &t, &u, &v) && t < *tNear) {
             *tNear = t;
+            *tIndex = j;
             isect |= true;
         }
     }
     return isect;
 }
 
-Vec3UC test_objects(Vec3D origin, Vec3D direction, OBJ objects[], int objects_size) {
-    double oNear = INFINITY;
+bool inShadow(OBJ *objects, int objects_size, Light light, Vec3D tOrigin, Vec3D normal, double *cosTheta) {
+    Vec3D lightDirection = vsub(light.position, tOrigin);
+    double len2 = vsum(vmul(lightDirection, lightDirection));
+    Vec3D normalizedLightDirection = svdiv(lightDirection, sqrt(len2));
+
+    double oNear = len2;
     bool isect = false;
-    int oIndex = -1;
+    int tIndex = -1;
     for (int j = 0; j < objects_size; j++) {
         double tNear = INFINITY;
-        isect |= intersect(objects[j].mesh, origin, direction, &tNear);
+        isect |= intersect(objects[j].mesh, tOrigin, normalizedLightDirection, &tNear, &tIndex);
+        if (pow(tNear, 2) < oNear) {
+            oNear = tNear;
+        }
+    }
+
+    if (isect) {
+        *cosTheta = dot_product(normal, normalizedLightDirection);
+        return false;
+    }
+
+    return true;
+}
+
+Vec3UC castRay(int ray_depth, Vec3D origin, Vec3D direction, Light light, OBJ *objects, int objects_size) {
+    if (ray_depth == 0) {
+        return (Vec3UC) {0, 0, 0};
+    }
+
+    double oNear = INFINITY;
+    bool isect = false;
+    int oIndex = -1, tIndex = -1;
+    for (int j = 0; j < objects_size; j++) {
+        double tNear = INFINITY;
+        isect |= intersect(objects[j].mesh, origin, direction, &tNear, &tIndex);
         if (tNear < oNear) {
             oNear = tNear;
             oIndex = j;
         }
     }
     if (isect) {
-        return objects[oIndex].color;
+        // Shading Logic
+        // Enduce Recursion
+        // Vec3UC rhitColor = test_objects(ray_depth - 1, origin, direction, objects, objects_size);
+        Vec3D tOrigin = vadd(origin, sdmul(direction, oNear));
+        double cosTheta;
+        if (!inShadow(objects, objects_size, light, tOrigin, objects[oIndex].mesh.normals.array[tIndex], &cosTheta)) {
+            printf("%lf ", cosTheta);
+            Vec3UC hitColor = sumul(objects[oIndex].color, light.intensity * (float) fmax(0.0, cosTheta)); // not in shadow
+            printf("%u %u %u\n", hitColor.vec[0], hitColor.vec[1], hitColor.vec[2]);
+            return hitColor;
+        }
+        return (Vec3UC) {0, 0, 0}; // in shadow
     }
-    return (Vec3UC) {127, 127, 127};
+    // Skybox Logic
+    return (Vec3UC) {127, 127, 127}; // background color
 }
 
-ArrayUC object_intersection_test(Camera cam, OBJ objects[], int objects_size) {
+ArrayUC object_intersection_test(Camera cam, int ray_depth, Light light, OBJ objects[], int objects_size) {
     ArrayUC arr;
     arr.array = malloc(cam.directions.size * sizeof(Vec3UC));
     arr.size = cam.directions.size;
 
     for (int i = 0; i < cam.directions.size; i++) {
         Vec3D origin = cam.origins.array[i], direction = cam.directions.array[i];
-        arr.array[i] = test_objects(origin, direction, objects, objects_size);
+        arr.array[i] = castRay(ray_depth, origin, direction, light, objects, objects_size);
     }
     return arr;
 }

@@ -2,6 +2,7 @@
 #include "vec.h"
 #include "object.h"
 #include "camera.h"
+#include "light.h"
 
 #ifndef RAY_H
 #define RAY_H
@@ -10,8 +11,8 @@ bool ray_triangle_intersection(Vec3D, Vec3D, Vec3D, Vec3D, Vec3D, double*, doubl
 
 bool intersect(Mesh, Vec3D, Vec3D, double *);
 
-Vec3UC test_objects(Vec3D, Vec3D, OBJ[], int);
+Vec3UC castRay(int, Vec3D, Vec3D, Light, OBJ *, int);
 
-ArrayUC object_intersection_test(Camera, OBJ[], int);
+ArrayUC object_intersection_test(Camera, int, Light, OBJ[], int);
 
 #endif
