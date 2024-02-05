@@ -13,6 +13,6 @@ bool intersect(Mesh, Vec3D, Vec3D, double *);
 
 Vec3UC castRay(int, Vec3D, Vec3D, Light, OBJ *, int);
 
-ArrayUC object_intersection_test(Camera, int, Light, OBJ[], int);
+ArrayUC render(Camera, int, Light, OBJ[], int);
 
 #endif
