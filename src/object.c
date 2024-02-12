@@ -12,7 +12,7 @@ Mesh read(char file_name[]) {
     int currentSizeV = 1000;
     int currentSizeF = 1000;
     Mesh m;
-    m.vertices.array = malloc(currentSizeV * sizeof(Vec3D));
+    m.vertices.array = malloc(currentSizeV * sizeof(Vec3));
     m.vertices.size = 0;
     m.faces.array = malloc(currentSizeF * sizeof(Vec3I));
     m.faces.size = 0;
@@ -38,7 +38,7 @@ Mesh read(char file_name[]) {
                 if ((line[i] == ' ' || line[i] == '\n' || line[i] == '\r' || line[i+1] == '\0') && j > 0) {
                     if (v >= currentSizeV) {
                         currentSizeV *= 2;
-                        m.vertices.array = realloc(m.vertices.array, currentSizeV * sizeof(Vec3D));
+                        m.vertices.array = realloc(m.vertices.array, currentSizeV * sizeof(Vec3));
                     }
 
                     number[j] = '\0';
@@ -73,7 +73,7 @@ Mesh read(char file_name[]) {
             f++;
         }
     }
-    m.vertices.array = realloc(m.vertices.array, v * sizeof(Vec3D));
+    m.vertices.array = realloc(m.vertices.array, v * sizeof(Vec3));
     m.vertices.size = v;
     m.faces.array = realloc(m.faces.array, f * sizeof(Vec3I));
     m.faces.size = f;
@@ -84,20 +84,20 @@ Mesh read(char file_name[]) {
 
 void generate_normals(Mesh *m) {
     int currentSizeN = 1000, i = 0;
-    m->normals.array = malloc(currentSizeN * sizeof(Vec3D));
+    m->normals.array = malloc(currentSizeN * sizeof(Vec3));
     m->normals.size = 0;
 
     for (; i < m->faces.size; i++) {
         int a = m->faces.array[i].vec[0], b = m->faces.array[i].vec[1], c = m->faces.array[i].vec[2];
-        Vec3D v0 = m->vertices.array[a], v1 = m->vertices.array[b], v2 = m->vertices.array[c];
-        Vec3D n = cross_product(vsub(v1, v0), vsub(v2, v0));
+        Vec3 v0 = m->vertices.array[a], v1 = m->vertices.array[b], v2 = m->vertices.array[c];
+        Vec3 n = cross_product((Vec3) sub(v1, v0), (Vec3) sub(v2, v0));
         if (i >= currentSizeN) {
             currentSizeN *= 2;
-            m->normals.array = realloc(m->normals.array, currentSizeN * sizeof(Vec3D));
+            m->normals.array = realloc(m->normals.array, currentSizeN * sizeof(Vec3));
         }
         m->normals.array[i] = normalize(n);
     }
-    m->normals.array = realloc(m->normals.array, i * sizeof(Vec3D));
+    m->normals.array = realloc(m->normals.array, i * sizeof(Vec3));
     m->normals.size = i;
 }
 

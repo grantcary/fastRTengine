@@ -5,8 +5,8 @@
 
 typedef struct {
     unsigned type; // 0: sun
-    Vec3D position;
-    Vec3D direction;
+    Vec3 position;
+    Vec3 direction;
     float intensity;
 } Light;
 

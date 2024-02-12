@@ -4,13 +4,13 @@
 #define OBJECT_H
 
 typedef struct {
-    ArrayD vertices;
+    Array vertices;
     ArrayI faces;
-    ArrayD normals;
+    Array normals;
 } Mesh;
 
 typedef struct {
-    Vec3D origin;
+    Vec3 origin;
     Mesh mesh;
     Vec3UC color;
 } OBJ;

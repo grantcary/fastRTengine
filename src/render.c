@@ -20,7 +20,7 @@ int main() {
     OBJ objects[] = {cube};
     int objects_size = sizeof(objects) / sizeof(OBJ);
 
-    Camera cam = initializationCamera(w, h, 90, (Vec3D) {0.0, 0.0, 2.5});
+    Camera cam = initializationCamera(w, h, 90, (Vec3) {0.0, 0.0, 2.5});
     cam.max_depth = 3;
 
     Light light1 = {

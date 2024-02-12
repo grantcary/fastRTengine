@@ -3,29 +3,22 @@
 #ifndef VMATH_H
 #define VMATH_H
 
-Vec3D vadd(Vec3D, Vec3D);
+#define add(a, b) {a.vec[0] * b.vec[0], a.vec[1] * b.vec[1], a.vec[2] * b.vec[2]}
+#define sub(a, b) {a.vec[0] - b.vec[0], a.vec[1] - b.vec[1], a.vec[2] - b.vec[2]}
+#define mul(a, b) {a.vec[0] * b.vec[0], a.vec[1] * b.vec[1], a.vec[2] * b.vec[2]}
+#define div(a, b) {a.vec[0] / b.vec[0], a.vec[1] / b.vec[1], a.vec[2] / b.vec[2]}
 
-Vec3UC uadd(Vec3UC, Vec3UC);
+#define addc(a, b) {a.vec[0] + b, a.vec[1] + b, a.vec[2] + b}
+#define subc(a, b) {a.vec[0] - b, a.vec[1] - b, a.vec[2] - b}
+#define mulc(a, b) {a.vec[0] * b, a.vec[1] * b, a.vec[2] * b}
+#define divc(a, b) {a.vec[0] / b, a.vec[1] / b, a.vec[2] / b}
 
-Vec3D vsub(Vec3D, Vec3D);
+#define sum(a) a.vec[0] + a.vec[1] + a.vec[2]
 
-Vec3D svdiv(Vec3D, double);
+Vec3 cross_product(Vec3, Vec3);
 
-Vec3UC umul(Vec3UC, Vec3UC);
+float dot_product(Vec3, Vec3);
 
-Vec3UC sumul(Vec3UC, double);
-
-Vec3D vmul(Vec3D, Vec3D);
-
-Vec3D sdmul(Vec3D, double);
-
-double vsum(Vec3D);
-
-Vec3D cross_product(Vec3D, Vec3D);
-
-double dot_product(Vec3D, Vec3D);
-
-Vec3D normalize(Vec3D);
-
+Vec3 normalize(Vec3);
 
 #endif

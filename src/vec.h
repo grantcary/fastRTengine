@@ -2,13 +2,13 @@
 #define VEC_H
 
 typedef struct {
-    double vec[3];
-} Vec3D;
+    float vec[3];
+} Vec3;
 
 typedef struct {
-    Vec3D *array;
+    Vec3 *array;
     int size;
-} ArrayD;
+} Array;
 
 typedef struct {
     unsigned char vec[3];
