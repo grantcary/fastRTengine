@@ -70,18 +70,25 @@ Vec3UC castRay(int ray_depth, Vec3 origin, Vec3 direction, Light light, OBJ *obj
     OBJ *hitObject = NULL;
     if (trace(objects, objects_size, origin, direction, &tNear, &triIndex, &hitObject)) {
         Vec3 hitPoint = (Vec3) add(origin, (Vec3) mulc(direction, tNear));
+        
+        if ((*hitObject).material == 0) {  // diffuse
 
-        Vec3 lightDir = (Vec3) sub(light.position, hitPoint);
-        float len2 = sum((Vec3) mul(lightDir, lightDir));
-        Vec3 normLightDir = (Vec3) divc(lightDir, sqrt(len2));
+            Vec3 lightDir = (Vec3) sub(light.position, hitPoint);
+            float len2 = sum((Vec3) mul(lightDir, lightDir));
+            Vec3 normLightDir = (Vec3) divc(lightDir, sqrt(len2));
 
-        float tNearShadow = len2;
-        int triIndexShadow = -1;
-        OBJ *hitObjectShadow = NULL;
-        bool inShadow = !trace(objects, objects_size, hitPoint, normLightDir, &tNearShadow, &triIndexShadow, &hitObjectShadow) && pow(tNearShadow, 2) < len2;
+            float tNearShadow = len2;
+            int triIndexShadow = -1;
+            OBJ *hitObjectShadow = NULL;
+            bool inShadow = !trace(objects, objects_size, hitPoint, normLightDir, &tNearShadow, &triIndexShadow, &hitObjectShadow) && pow(tNearShadow, 2) < len2;
 
-        float cosTheta = dot_product((*hitObject).mesh.normals.array[triIndex], normLightDir);
-        return (Vec3UC) mulc((*hitObject).color, light.intensity * (float) fmax(0.0, cosTheta) * (1 - inShadow));
+            float cosTheta = dot_product((*hitObject).mesh.normals.array[triIndex], normLightDir);
+            return (Vec3UC) mulc((*hitObject).color, light.intensity * (float) fmax(0.0, cosTheta) * (1 - inShadow));
+        } else if ((*hitObject).material == 1) { // reflect
+            float cosTheta = dot_product((*hitObject).mesh.normals.array[triIndex], direction);
+            Vec3 reflectionDirection = (Vec3) sub(direction, (Vec3) mulc((*hitObject).mesh.normals.array[triIndex], cosTheta * 2.0));
+            return castRay(ray_depth - 1, hitPoint, reflectionDirection, light, objects, objects_size);
+        }
     }
     return (Vec3UC) {127, 127, 127};
 }

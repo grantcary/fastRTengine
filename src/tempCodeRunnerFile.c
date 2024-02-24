@@ -1,0 +1,1 @@
+clang render.c camera.c object.c ray.c vmath.c vops.c -lm

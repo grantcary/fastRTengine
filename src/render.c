@@ -9,15 +9,25 @@
 int main() {
     int w = 1000, h = 1000;
 
-    Mesh m = read("../objects/icosphere.obj");
-    generate_normals(&m);
-
+    Mesh c = read("../objects/cube.obj");
+    generate_normals(&c);
     OBJ cube = {
-        .origin = {0.0, 0.0, 0.0},
-        .mesh = m,
-        .color = {252, 186, 3}
+        .origin = {0.0, 1.0, 3.0},
+        .mesh = c,
+        .color = {252, 186, 3},
+        .material = 0
     };
-    OBJ objects[] = {cube};
+
+    Mesh i = read("../objects/icosphere.obj");
+    generate_normals(&i);
+    OBJ icosphere = {
+        .origin = {0.0, 0.0, 0.0},
+        .mesh = i,
+        .color = {252, 186, 3},
+        .material = 1
+    };
+
+    OBJ objects[] = {icosphere};
     int objects_size = sizeof(objects) / sizeof(OBJ);
 
     Camera cam = initializationCamera(w, h, 90, (Vec3) {0.0, 0.0, 2.5});
@@ -32,7 +42,7 @@ int main() {
     // Light lights[] = {light1};
     // int lights_size = sizeof(lights) / sizeof(Light);
 
-    ArrayUC image = render(cam, 1, light1, objects, objects_size);
+    ArrayUC image = render(cam, 3, light1, objects, objects_size);
     
     writeArrayToFile(w, h, &image);
 
