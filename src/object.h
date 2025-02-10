@@ -13,7 +13,7 @@ typedef struct {
     Vec3 origin;
     Mesh mesh;
     Vec3UC color;
-    unsigned material;
+    float reflectivity;
 } OBJ;
 
 Mesh read(char[]);

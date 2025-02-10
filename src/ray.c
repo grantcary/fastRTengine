@@ -61,36 +61,35 @@ bool trace(OBJ *objects, int objects_size, Vec3 origin, Vec3 direction, float *t
 }
 
 Vec3UC castRay(int ray_depth, Vec3 origin, Vec3 direction, Light light, OBJ *objects, int objects_size) {
-    if (ray_depth == 0) {
-        return (Vec3UC) {0, 0, 0};
-    }
+    Vec3UC hitColor = {255, 255, 255};
 
     float tNear = INFINITY;  
     int triIndex = -1;
     OBJ *hitObject = NULL;
-    if (trace(objects, objects_size, origin, direction, &tNear, &triIndex, &hitObject)) {
+    if (ray_depth == 0 || trace(objects, objects_size, origin, direction, &tNear, &triIndex, &hitObject)) {
         Vec3 hitPoint = (Vec3) add(origin, (Vec3) mulc(direction, tNear));
+
+        Vec3 lightDir = (Vec3) sub(light.position, hitPoint);
+        float len2 = sum((Vec3) mul(lightDir, lightDir));
+        Vec3 normLightDir = (Vec3) divc(lightDir, sqrt(len2));
+
+        float tNearShadow = len2;
+        int triIndexShadow = -1;
+        OBJ *hitObjectShadow = NULL;
+        bool inShadow = !trace(objects, objects_size, hitPoint, normLightDir, &tNearShadow, &triIndexShadow, &hitObjectShadow) && pow(tNearShadow, 2) < len2;
+
+        float cosTheta = dot_product((*hitObject).mesh.normals.array[triIndex], normLightDir);
         
-        if ((*hitObject).material == 0) {  // diffuse
-
-            Vec3 lightDir = (Vec3) sub(light.position, hitPoint);
-            float len2 = sum((Vec3) mul(lightDir, lightDir));
-            Vec3 normLightDir = (Vec3) divc(lightDir, sqrt(len2));
-
-            float tNearShadow = len2;
-            int triIndexShadow = -1;
-            OBJ *hitObjectShadow = NULL;
-            bool inShadow = !trace(objects, objects_size, hitPoint, normLightDir, &tNearShadow, &triIndexShadow, &hitObjectShadow) && pow(tNearShadow, 2) < len2;
-
-            float cosTheta = dot_product((*hitObject).mesh.normals.array[triIndex], normLightDir);
-            return (Vec3UC) mulc((*hitObject).color, light.intensity * (float) fmax(0.0, cosTheta) * (1 - inShadow));
-        } else if ((*hitObject).material == 1) { // reflect
+        hitColor = (Vec3UC) mulc((*hitObject).color, light.intensity * (float) fmax(0.0, cosTheta) * (1 - inShadow));
+        if ((*hitObject).reflectivity > 0.0) { // reflect        
             float cosTheta = dot_product((*hitObject).mesh.normals.array[triIndex], direction);
             Vec3 reflectionDirection = (Vec3) sub(direction, (Vec3) mulc((*hitObject).mesh.normals.array[triIndex], cosTheta * 2.0));
-            return castRay(ray_depth - 1, hitPoint, reflectionDirection, light, objects, objects_size);
+            Vec3UC reflectedColor = castRay(ray_depth - 1, hitPoint, reflectionDirection, light, objects, objects_size);
+            printf("%u %u %u %d\n", reflectedColor.vec[0], reflectedColor.vec[1], reflectedColor.vec[2], ray_depth);
+            hitColor = (Vec3UC) add((Vec3UC) mulc(reflectedColor, (*hitObject).reflectivity), hitColor);
         }
     }
-    return (Vec3UC) {127, 127, 127};
+    return hitColor;
 }
 
 ArrayUC render(Camera cam, int ray_depth, Light light, OBJ objects[], int objects_size) {

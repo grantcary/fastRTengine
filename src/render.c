@@ -7,7 +7,7 @@
 // clang render.c camera.c object.c ray.c vmath.c vops.c -lm
 
 int main() {
-    int w = 1000, h = 1000;
+    int w = 250, h = 250;
 
     Mesh c = read("../objects/cube.obj");
     generate_normals(&c);
@@ -15,7 +15,7 @@ int main() {
         .origin = {0.0, 1.0, 3.0},
         .mesh = c,
         .color = {252, 186, 3},
-        .material = 0
+        .reflectivity = 0
     };
 
     Mesh i = read("../objects/icosphere.obj");
@@ -24,7 +24,7 @@ int main() {
         .origin = {0.0, 0.0, 0.0},
         .mesh = i,
         .color = {252, 186, 3},
-        .material = 1
+        .reflectivity = 0.0
     };
 
     OBJ objects[] = {icosphere};
